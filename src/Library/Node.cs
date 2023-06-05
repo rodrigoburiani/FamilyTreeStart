@@ -6,33 +6,37 @@ namespace Library
 {
     public class Node
     {
-        private int number;
-
+        private Persona persona;
         private List<Node> children = new List<Node>();
 
-        public int Number {
-            get
+        public Persona Persona
+        {
+            get { return persona; }
+            set { persona = value; }
+        }
+
+        public ReadOnlyCollection<Node> Children
+        {
+            get { return children.AsReadOnly(); }
+        }
+
+        public Node(Persona persona)
+        {
+            this.persona = persona;
+        }
+
+        public void AddChild(Node child)
+        {
+            children.Add(child);
+        }
+
+        public void Accept(INodeVisitor visitor)
+        {
+            visitor.Visit(this);
+            foreach (var child in children)
             {
-                return this.number;
+                child.Accept(visitor);
             }
         }
-
-        public ReadOnlyCollection<Node> Children { 
-            get
-            {
-                return this.children.AsReadOnly();
-            }
-        }
-
-        public Node(int number)
-        {
-            this.number = number;
-        }
-
-        public void AddChildren(Node n)
-        {
-            this.children.Add(n);
-        }
-        
     }
 }
